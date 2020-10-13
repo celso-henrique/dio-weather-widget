@@ -1,7 +1,7 @@
 {
   "name": "dio-weather-widget",
   "version": "1.0.0",
-  "description": "",
+  "description": "Dio Weather Widget using Web Component and Webpack for bundle.",
   "main": "dist/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
