@@ -10,7 +10,7 @@ class DioWeather extends HTMLElement {
       <style>${style}</style>
       <div class="app">
         <h1 id="temp-main">0°</h1>
-        <h2 id="condition">unknown</h2>
+        <h2 id="condition">desconhecida</h2>
       <div/>
     `;
 
@@ -21,7 +21,8 @@ class DioWeather extends HTMLElement {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         data => this.getWeather(data),
-        err => console.log(err)
+        err => console.log(err),
+        { timeout: 10000 }
       );
     } else {
       alert('Geolocation not supported by this browser');
@@ -29,7 +30,7 @@ class DioWeather extends HTMLElement {
   }
 
   getWeather({ coords: { latitude, longitude } }) {
-    const baseURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
+    const baseURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&lang=pt_br`;
 
     fetch(baseURL)
       .then(res => res.json())
