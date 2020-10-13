@@ -30,7 +30,6 @@ class DioWeather extends HTMLElement {
 
   getWeather({ coords: { latitude, longitude } }) {
     const baseURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
-    console.log('fetch');
 
     fetch(baseURL)
       .then(res => res.json())
