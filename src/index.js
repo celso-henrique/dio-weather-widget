@@ -1,11 +1,49 @@
 import style from './style.css';
 
-function component() {
-  const element = document.createElement('div');
+const API_KEY = process.env.API_KEY;
 
-  element.innerHTML = 'Dio Web Component';
+class DioWeather extends HTMLElement {
+  connectedCallback() {
+    this.shadow = this.attachShadow({ mode: 'open' });
 
-  return element;
+    this.shadow.innerHTML = `
+      <style>${style}</style>
+      <div class="app">
+        <h1 id="temp-main">0°</h1>
+        <h2 id="condition">unknown</h2>
+      <div/>
+    `;
+
+    this.getLocation();
+  }
+
+  getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        data => this.getWeather(data),
+        err => console.log(err)
+      );
+    } else {
+      alert('Geolocation not supported by this browser');
+    }
+  }
+
+  getWeather({ coords: { latitude, longitude } }) {
+    const baseURL = `http://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
+    console.log('fetch');
+
+    fetch(baseURL)
+      .then(res => res.json())
+      .then(({ current: data }) => {
+        const temp = Math.floor(data.temp - 273);
+        const condition = data.weather[0].description;
+        const h1 = this.shadow.querySelector('#temp-main');
+        const h2 = this.shadow.querySelector('#condition');
+
+        h1.innerHTML = `${temp}°`;
+        h2.innerHTML = condition;
+      });
+  }
 }
 
-document.body.appendChild(component());
+customElements.define('dio-weather', DioWeather);
